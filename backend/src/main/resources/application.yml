@@ -1,0 +1,54 @@
+# Application Configuration
+spring:
+  application:
+    name: СЦТД
+  datasource:
+    url: jdbc:h2:mem:sctd
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  security:
+    user:
+      name: admin
+      password: admin
+
+# Server Configuration
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# JWT Configuration
+jwt:
+  secret: Y2VudGVyaW52ZXN0c2N0ZHNlY3JldGtleWZvcmpzb253ZWJ0b2tlbnMxMjM0NTY=
+  expiration: 86400000 # 24 hours
+
+# File Storage Configuration
+file:
+  upload-dir: ./uploads
+
+# gRPC Configuration
+grpc:
+  server:
+    port: 9090
+    security:
+      enabled: true
+    in-process-name: sctd-grpc-server
+  client:
+    in-process-target: in-process:sctd-grpc-server
+  
+# Logging Configuration
+logging:
+  level:
+    ru.centerinvest.sctd: DEBUG
+    org.springframework.security: INFO
+    net.devh.boot.grpc: INFO 

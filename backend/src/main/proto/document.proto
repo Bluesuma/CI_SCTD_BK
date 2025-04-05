@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ru.centerinvest.sctd.grpc";
+
+import "google/protobuf/timestamp.proto";
+
+// Сервис документов
+service DocumentService {
+  rpc GetDocument(GetDocumentRequest) returns (DocumentResponse);
+  rpc ListDocuments(ListDocumentsRequest) returns (ListDocumentsResponse);
+  rpc CreateDocument(CreateDocumentRequest) returns (DocumentResponse);
+  rpc UpdateDocumentStatus(UpdateStatusRequest) returns (DocumentResponse);
+  rpc AddComment(AddCommentRequest) returns (CommentResponse);
+}
+
+// Запрос на получение документа
+message GetDocumentRequest {
+  int64 id = 1;
+}
+
+// Запрос на список документов
+message ListDocumentsRequest {
+  string search_query = 1;
+  string status = 2;
+  string department = 3;
+  int32 page = 4;
+  int32 size = 5;
+}
+
+// Ответ со списком документов
+message ListDocumentsResponse {
+  repeated DocumentResponse documents = 1;
+  int32 total_pages = 2;
+  int64 total_elements = 3;
+}
+
+// Запрос на создание документа
+message CreateDocumentRequest {
+  string title = 1;
+  string description = 2;
+  string department = 3;
+  bytes file_content = 4;
+  string file_name = 5;
+  string file_type = 6;
+}
+
+// Запрос на обновление статуса
+message UpdateStatusRequest {
+  int64 document_id = 1;
+  string status = 2;
+  string comment = 3;
+}
+
+// Запрос на добавление комментария
+message AddCommentRequest {
+  int64 document_id = 1;
+  string text = 2;
+}
+
+// Ответ с документом
+message DocumentResponse {
+  int64 id = 1;
+  string title = 2;
+  string description = 3;
+  string department = 4;
+  UserResponse author = 5;
+  string status = 6;
+  string file_name = 7;
+  string file_type = 8;
+  int64 file_size = 9;
+  string file_url = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+  repeated StatusHistoryResponse status_history = 13;
+  repeated CommentResponse comments = 14;
+}
+
+// Пользователь
+message UserResponse {
+  int64 id = 1;
+  string name = 2;
+  string email = 3;
+  string department = 4;
+  string role = 5;
+}
+
+// История статусов
+message StatusHistoryResponse {
+  int64 id = 1;
+  UserResponse user = 2;
+  string status = 3;
+  string comment = 4;
+  google.protobuf.Timestamp date = 5;
+}
+
+// Комментарий
+message CommentResponse {
+  int64 id = 1;
+  UserResponse user = 2;
+  string text = 3;
+  google.protobuf.Timestamp date = 4;
+} 
